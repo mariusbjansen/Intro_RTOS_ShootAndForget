@@ -71,12 +71,13 @@ TASK_USER_DATA  TaskUserData[7];
 
 /*
 *********************************************************************************************************
-* Define the message queue pointer and the storage for the message queue
+* Deine the message queue pointer and the storage for the message queue
 *********************************************************************************************************
 */
 // Add your code here!!
-OS_EVENT *App_Message;
-void *App_BufMessage[MSG_QUEUE_SIZE];
+OS_EVENT * MyQ;
+void * MyQStorage[MSG_QUEUE_SIZE];
+
 // End of your code
 /*
 *********************************************************************************************************
@@ -150,7 +151,9 @@ void  TaskStart (void *pdata)
 *********************************************************************************************************
 */
 // Add your code here!!
-App_Message = OSQCreate(&App_BufMessage[0],MSG_QUEUE_SIZE);
+MyQ = OSQCreate(&MyQStorage, MSG_QUEUE_SIZE);
+
+    
 // End of your code!!
     TaskStartCreateTasks();
 
@@ -338,12 +341,15 @@ void  Task1 (void *pdata)
 *********************************************************************************************************
 */
 // Add your code!!
-    for(;;)
-    {
-        msg = (char*)OSQPend(App_Message, 0, &err);
+    for(;;){
+        msg = (char *)OSQPend(MyQ, 0, &err);
         PC_DispStr(70, 13, msg, DISP_FGND_YELLOW + DISP_BGND_BLUE);
         OSTimeDlyHMSM(0, 0, 0, 100);
     }
+
+
+
+
 // End of your code!!
 }
 
@@ -368,12 +374,14 @@ void  Task2 (void *pdata)
 *********************************************************************************************************
 */
 // Add your code!!
-    for(;;)
-    {
-        OSQPost(App_Message, (void*)(msg));
+    for (;;){
+        OSQPost(MyQ, (void *) (msg));
         OSTimeDlyHMSM(0, 0, 0, 500);
     }
-// End of your code!!
+
+
+
+// End of your code!!    
 }
 /*$PAGE*/
 /*
@@ -396,13 +404,15 @@ void  Task3 (void *pdata)
 *       & delay yourself for 500 ms
 *********************************************************************************************************
 */
-// Add your code!!
-    for(;;)
-    {
-        OSQPost(App_Message, (void*)(msg));
+// Add your code!!    
+    for (;;){
+        OSQPost(MyQ, (void *) (msg));
         OSTimeDlyHMSM(0, 0, 0, 500);
     }
-// End of your code!!
+
+
+
+// End of your code!!    
 }
 
 /*
@@ -426,12 +436,14 @@ void  Task4 (void *pdata)
 *********************************************************************************************************
 */
 // Add your code!!
-    for(;;)
-    {
-        OSQPost(App_Message, (void*)(msg));
+    for (;;){
+        OSQPost(MyQ, (void *) (msg));
         OSTimeDlyHMSM(0, 0, 0, 500);
     }
-// End of your code!!
+
+
+
+// End of your code!!    
 }
 /*$PAGE*/
 /*
